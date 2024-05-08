@@ -1,6 +1,7 @@
 package com.SEBN.backend.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,7 +10,7 @@ import java.util.Set;
 
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
-                "nom"
+                "username"
         }),
         @UniqueConstraint(columnNames = {
                 "email"
@@ -24,9 +25,15 @@ public class User {
 
     private String nom;
 
+
+    @Email
+
     private String email;
 
     private String role;
+    private String username;
+
+    private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
@@ -83,13 +90,33 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String nom, String email, String role, Set<Role> roles, RoleRespo roleRespo) {
-        this.id = id;
-        this.nom = nom;
-        this.email = email;
-        this.role = role;
-        this.roles = roles;
-        this.roleRespo = roleRespo;
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public RoleRespo getRoleRespo() {
+        return roleRespo;
+    }
+
+    public void setRoleRespo(RoleRespo roleRespo) {
+        this.roleRespo = roleRespo;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public User(  String email,  String username, String password) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
     }
 }
