@@ -14,6 +14,7 @@ public class Reunions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private LocalDateTime date;
     private String lieu;
     private String sujet;
@@ -26,6 +27,7 @@ public class Reunions {
 
     public Reunions(Long id, LocalDateTime date, String lieu, String sujet, User user) {
         this.id = id;
+
         this.date = date;
         this.lieu = lieu;
         this.sujet = sujet;
@@ -71,8 +73,8 @@ public class Reunions {
     public void setUser(User user) {
         this.user = user;
     }
-    // Constructeurs, getters et setters
 
-    // Autres champs et méthodes
+
+
 }
 

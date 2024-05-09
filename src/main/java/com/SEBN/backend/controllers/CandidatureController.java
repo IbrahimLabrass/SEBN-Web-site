@@ -29,7 +29,6 @@ public class CandidatureController {
     @GetMapping("/condidatures")
     public List<Condidature> getAllCondidatures() {
         return  (List<Condidature>) CandidatureRepository.findAll();
-        //return (List<Condidature>) CondidatureRepository.findAll();
     }
 
 

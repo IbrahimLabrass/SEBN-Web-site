@@ -13,9 +13,9 @@ public class Entretien {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String nomCandidat ;
+    private String prenomCandidat ;
     private LocalDateTime date;
-    private String participants;
     private String resultats;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -24,10 +24,11 @@ public class Entretien {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    public Entretien(Long id, LocalDateTime date, String participants, String resultats, User user) {
+    public Entretien(Long id, LocalDateTime date, String nomCandidat,String prenomCandidat, String resultats, User user) {
         this.id = id;
+        this.nomCandidat = nomCandidat;
+        this.prenomCandidat = prenomCandidat;
         this.date = date;
-        this.participants = participants;
         this.resultats = resultats;
         this.user = user;
     }
@@ -48,13 +49,7 @@ public class Entretien {
         this.date = date;
     }
 
-    public String getParticipants() {
-        return participants;
-    }
 
-    public void setParticipants(String participants) {
-        this.participants = participants;
-    }
 
     public String getResultats() {
         return resultats;
@@ -71,4 +66,21 @@ public class Entretien {
     public void setUser(User user) {
         this.user = user;
     }
+    public String getNomCandidat() {
+        return nomCandidat;
+    }
+
+    public void setNomCandidat(String nomCandidat) {
+        this.nomCandidat = nomCandidat;
+    }
+
+    public String getPrenomCandidat() {
+        return prenomCandidat;
+    }
+
+    public void setPrenomCandidat(String prenomCandidat) {
+        this.prenomCandidat = prenomCandidat;
+    }
+
+
 }
