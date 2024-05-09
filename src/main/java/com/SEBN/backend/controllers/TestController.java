@@ -22,10 +22,10 @@ public class TestController {
     }
 
 
-    @GetMapping("/respo")
-    @PreAuthorize("hasRole('ROLE_RESPO')")
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String respoAccess() {
-        return "Respo stage Board.";
+        return "Admin  Board.";
     }
     @GetMapping("/stage")
     @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
