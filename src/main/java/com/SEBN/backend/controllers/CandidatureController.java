@@ -49,6 +49,24 @@ public class CandidatureController {
         return CandidatureRepository.save(condidatures);
     }
 
+    @PutMapping("/condidatures/{id}")
+    public ResponseEntity<Condidature> updateCondidature(@PathVariable(value = "id") Long id,
+                                                         @Valid @RequestBody Condidature condidaturesDetails) {
+        Optional<Condidature> optionalCondidature = CandidatureRepository.findById(id);
+        if (!optionalCondidature.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Condidature existingCondidature = optionalCondidature.get();
+        existingCondidature.setNom(condidaturesDetails.getNom());
+        existingCondidature.setEmail(condidaturesDetails.getEmail());
+        existingCondidature.setCv(condidaturesDetails.getCv());
+        existingCondidature.setLettremo(condidaturesDetails.getLettremo());
+        existingCondidature.setOffreEmpl(condidaturesDetails.getOffreEmpl());
+
+        final Condidature updatedCondidature = CandidatureRepository.save(existingCondidature);
+        return ResponseEntity.ok(updatedCondidature);
+    }
 
 
     @DeleteMapping("/condidatures/{id}")
