@@ -118,8 +118,16 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</exclude>
+						<info>
+							<contact>
+								<email>labrasibrahim@gmail.com</email>
+								<name>Ibrahim Labras</name>
+								<url>https://github.com/IbrahimLabrass/SEBN-Web-site</url>
+							</contact>
+						</info>
 					</excludes>
 				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>

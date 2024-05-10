@@ -13,6 +13,7 @@ public class Condidature {
     private String email;
     private String cv;
     private String lettremo;
+    private boolean preselected = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "offers_id")
@@ -73,6 +74,14 @@ public class Condidature {
 
     public void setOffreEmpl(OffreEmpl offreEmpl) {
         this.offreEmpl = offreEmpl;
+    }
+
+    public boolean isPreselected() {
+        return preselected;
+    }
+
+    public void setPreselected(boolean preselected) {
+        this.preselected = preselected;
     }
 }
 

@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -24,6 +25,8 @@ public class EntretienController {
     private Optional<User> user;
 
     @GetMapping("/entretiens")
+    @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
+
     public List<Entretien> getAllEntretiens() {
 
 
@@ -32,6 +35,8 @@ public class EntretienController {
 
 
     @GetMapping("/condidature/{id}")
+    @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
+
     public ResponseEntity<Entretien> getEntretienById(@PathVariable(value = "id") Long id) {
         Optional<Entretien> optionalEntretien = EntretienRepository.findById(id);
         if (!optionalEntretien.isPresent()) {
@@ -43,6 +48,8 @@ public class EntretienController {
 
 
     @PostMapping("/entretiens")
+    @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
+
     public Entretien createEntretien(@Valid @RequestBody Entretien entretiens) {
         return EntretienRepository.save(entretiens);
     }
@@ -50,6 +57,8 @@ public class EntretienController {
 
 
     @DeleteMapping("/entretiens/{id}")
+    @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
+
     public ResponseEntity<Map<String, Boolean>> deleteEntretien(@PathVariable(value = "id") Long id) {
         Optional<Entretien> optionalEntretien = EntretienRepository.findById(id);
         if (!optionalEntretien.isPresent()) {

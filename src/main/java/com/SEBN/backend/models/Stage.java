@@ -16,6 +16,7 @@ public class Stage {
     private String sujet;
     private String duré;
     private String encadrant;
+    private boolean preselected = false;
 
     public Stage(Long id, String nom_stagaire, String sujet, String duré, String encadrant) {
         this.id = id;
@@ -63,5 +64,13 @@ public class Stage {
 
     public void setEncadrant(String encadrant) {
         this.encadrant = encadrant;
+    }
+
+    public boolean isPreselected() {
+        return preselected;
+    }
+
+    public void setPreselected(boolean preselected) {
+        this.preselected = preselected;
     }
 }

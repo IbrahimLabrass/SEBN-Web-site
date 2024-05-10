@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -28,6 +29,8 @@ public class OffreEmplController {
     }
 
     @GetMapping("/offres")
+    @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
+
     public List<OffreEmpl> getAllOffres() {
         return  (List<OffreEmpl>) OffreEmplRepository.findAll();
         //return (List<Offre>) OffreRepository.findAll();
@@ -35,6 +38,8 @@ public class OffreEmplController {
 
 
     @GetMapping("/offres/{id}")
+    @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
+
     public ResponseEntity<OffreEmpl> getOffreById(@PathVariable(value = "id") Long id) {
         OffreEmpl offres = OffreEmplRepository.findById(id).orElse(null);
         if (offres == null) {
@@ -44,6 +49,8 @@ public class OffreEmplController {
     }
 
     @GetMapping("/offre/{id}")
+    @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
+
     public List<OffreEmpl> getOffreByUser(@PathVariable(value = "id") String titre)
     {
         //Optional<User> users = UserRepository.findById(titre);
@@ -51,11 +58,15 @@ public class OffreEmplController {
     }
 
     @PostMapping("/offre")
+    @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
+
     public OffreEmpl createOffre(@Valid @RequestBody OffreEmpl offres) {
         return OffreEmplRepository.save(offres);
     }
 
     @PutMapping("/offres/{id}")
+    @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
+
     public ResponseEntity<OffreEmpl> updateOffre(@PathVariable(value = "id") Long id,
                                                  @Valid @RequestBody OffreEmpl offresDetails) {
         Optional<OffreEmpl> optionalOffre = OffreEmplRepository.findById(id);
@@ -74,6 +85,8 @@ public class OffreEmplController {
     }
 
     @DeleteMapping("/offres/{id}")
+    @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
+
     public ResponseEntity<Map<String, Boolean>> deleteOffre(@PathVariable(value = "id") Long id) {
         Optional<OffreEmpl> optionalOffre = OffreEmplRepository.findById(id);
         if (!optionalOffre.isPresent()) {
