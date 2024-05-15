@@ -1,8 +1,10 @@
 package com.SEBN.backend.controllers;
 
 import com.SEBN.backend.models.Event;
+import com.SEBN.backend.models.InscrEvent;
 import com.SEBN.backend.models.User;
 import com.SEBN.backend.repository.EventRepository;
+import com.SEBN.backend.repository.InscrEventRepository;
 import com.SEBN.backend.repository.UserRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +32,8 @@ import java.util.Optional;
 
         @Autowired
         private UserRepository userRepository;
-
+        @Autowired
+        private InscrEventRepository inscrEventRepository;
         // Endpoint to create a new event
         @PostMapping("/events")
         @ApiOperation(value = "Create a new event", notes = "Create a new event entry")
@@ -59,20 +62,7 @@ import java.util.Optional;
             return EventRepository.findAll();
         }
 
-        // Endpoint to retrieve a specific event by ID
-        @GetMapping("/events/{id}")
-        @ApiOperation(value = "Get event by ID", notes = "Retrieve a single event by its ID")
-        @ApiResponses(value = {
-                @ApiResponse(code = 200, message = "Event retrieved successfully"),
-                @ApiResponse(code = 404, message = "Event not found")
-        })
-        @PreAuthorize("hasRole('ROLE_RESP_EVENEMENT')")
 
-        public ResponseEntity<Event> getEventById(@PathVariable Long id) {
-            Optional<Event> optionalEvent = EventRepository.findById(id);
-            return optionalEvent.map(ResponseEntity::ok)
-                    .orElseGet(() -> ResponseEntity.notFound().build());
-        }
 
         // Endpoint to update an existing event
         @PutMapping("/events/{id}")
@@ -111,6 +101,41 @@ import java.util.Optional;
             }
             EventRepository.deleteById(id);
             return ResponseEntity.ok().build();
+        }
+
+        // Endpoint pour récupérer un événement par son ID
+        @GetMapping("/events/{id}")
+        @ApiOperation(value = "Get event by ID", notes = "Retrieve a single event by its ID")
+        @ApiResponses(value = {
+                @ApiResponse(code = 200, message = "Event retrieved successfully"),
+                @ApiResponse(code = 404, message = "Event not found")
+        })
+        public ResponseEntity<Event> getEventById(@PathVariable Long id) {
+            Optional<Event> optionalEvent = EventRepository.findById(id);
+            return optionalEvent.map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        }
+
+        // Endpoint pour permettre aux visiteurs de s'inscrire à un événement
+        @PostMapping("/events/{id}/register")
+        @ApiOperation(value = "Register for an event", notes = "Register for a specific event")
+        @ApiResponses(value = {
+                @ApiResponse(code = 201, message = "Registration successful"),
+                @ApiResponse(code = 400, message = "Bad request")
+        })
+        public ResponseEntity<?> registerForEvent(@PathVariable Long id, @Valid @RequestBody InscrEvent inscrEvent) {
+            try {
+                Optional<Event> optionalEvent = EventRepository.findById(id);
+                if (!optionalEvent.isPresent()) {
+                    return ResponseEntity.notFound().build();
+                }
+                Event event = optionalEvent.get();
+                inscrEvent.setEvent(event);
+                InscrEvent createdRegistration = inscrEventRepository.save(inscrEvent);
+                return ResponseEntity.status(HttpStatus.CREATED).body(createdRegistration);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to register for the event.");
+            }
         }
 
     }

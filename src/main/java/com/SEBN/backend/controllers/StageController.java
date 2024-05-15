@@ -1,7 +1,9 @@
 package com.SEBN.backend.controllers;
 
+import com.SEBN.backend.models.DemandeStage;
 import com.SEBN.backend.models.Stage;
 import com.SEBN.backend.models.User;
+import com.SEBN.backend.repository.DemandeStageRepository;
 import com.SEBN.backend.repository.StageRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,8 +29,27 @@ public class StageController {
 
     @Autowired
     private StageRepository stageRepository;
+    private DemandeStageRepository demandeStageRepository;
+
     private Optional<User> user;
 
+
+
+    @PostMapping("/stage-request")
+    @ApiOperation(value = "request internship", notes = "request an  internship ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Internship updated successfully"),
+            @ApiResponse(code = 404, message = "not done")
+    })
+    public ResponseEntity<?> createStageRequest(@Valid @RequestBody DemandeStage demandeStage) {
+        try {
+            // Enregistrez la demande de stage dans la base de données
+            DemandeStage createdRequest = demandeStageRepository.save(demandeStage);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdRequest);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create stage request.");
+        }
+    }
     @GetMapping("/stages")
     @ApiOperation(value = "Get all internships", notes = "Retrieve a list of all internships")
     @ApiResponse(code = 200, message = "List of internships retrieved successfully")
@@ -49,6 +70,8 @@ public class StageController {
     }
 
     @PostMapping("/stages")
+    @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
+
     @ApiOperation(value = "Create a new internship", notes = "Create a new internship entry")
     @ApiResponse(code = 201, message = "Internship created successfully")
     public ResponseEntity<Stage> createStage(@Valid @RequestBody Stage stage) {
@@ -57,6 +80,8 @@ public class StageController {
     }
 
     @PutMapping("/stages/{id}")
+    @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
+
     @ApiOperation(value = "Update internship", notes = "Update an existing internship by its ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Internship updated successfully"),
@@ -80,6 +105,8 @@ public class StageController {
     }
 
     @DeleteMapping("/stages/{id}")
+    @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
+
     @ApiOperation(value = "Delete internship", notes = "Delete an internship by its ID")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Internship deleted successfully"),

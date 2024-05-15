@@ -1,7 +1,9 @@
 package com.SEBN.backend.controllers;
 
+import com.SEBN.backend.models.Condidature;
 import com.SEBN.backend.models.OffreEmpl;
 import com.SEBN.backend.models.User;
+import com.SEBN.backend.repository.CandidatureRepository;
 import com.SEBN.backend.repository.OffreEmplRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +30,7 @@ public class OffreEmplController {
     @Autowired
     private OffreEmplRepository OffreEmplRepository;
     private Optional<User> user;
+    private CandidatureRepository candidatureRepository;
 
     @RequestMapping("/hello")
     public String index() {
@@ -65,6 +68,7 @@ public class OffreEmplController {
     @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
     @ApiOperation(value = "Get job offers by user", notes = "Retrieve job offers by user ID")
     @ApiResponse(code = 200, message = "List of job offers retrieved successfully")
+
     public List<OffreEmpl> getOffreByUser(@PathVariable(value = "id") String titre)
     {
         //Optional<User> users = UserRepository.findById(titre);
@@ -125,5 +129,25 @@ public class OffreEmplController {
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok().body(response);
     }
-
+    // Endpoint pour permettre aux visiteurs de postuler à une offre
+    @PostMapping("/offres/{id}/postuler")
+    @ApiOperation(value = "Apply for a job offer", notes = "Apply for a specific job offer")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Application successful"),
+            @ApiResponse(code = 400, message = "Bad request")
+    })
+    public ResponseEntity<?> postulerPourOffre(@PathVariable Long id, @Valid @RequestBody Condidature candidature) {
+        try {
+            Optional<OffreEmpl> optionalOffre = OffreEmplRepository.findById(id);
+            if (!optionalOffre.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+            OffreEmpl offreEmpl = optionalOffre.get();
+            candidature.setOffreEmpl(offreEmpl);
+            Condidature createdCandidature = candidatureRepository.save(candidature);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCandidature);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to apply for the job offer.");
+        }
+    }
 }
