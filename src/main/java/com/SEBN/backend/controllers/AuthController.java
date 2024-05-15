@@ -11,6 +11,10 @@ import com.SEBN.backend.repository.RoleRepository;
 import com.SEBN.backend.repository.UserRepository;
 import com.SEBN.backend.security.jwt.JwtUtils;
 import com.SEBN.backend.security.services.UserDetailsImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +34,9 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
+@Api(tags = "Authentication API")
+
 public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -47,7 +53,13 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("/signin")
+    @PostMapping("/auth/signin")
+    @ApiOperation(value = "Authenticate user", notes = "Authenticates a user with username and password")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Authentication successful"),
+            @ApiResponse(code = 401, message = "Unauthorized: Invalid credentials"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -68,7 +80,14 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/auth/signup")
+    @ApiOperation(value = "Register user", notes = "Registers a new user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "User registered successfully"),
+            @ApiResponse(code = 400, message = "Bad request: Invalid input data"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
