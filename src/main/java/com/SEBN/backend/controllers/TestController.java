@@ -1,7 +1,6 @@
 package com.SEBN.backend.controllers;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class TestController {
     @GetMapping("/all")
-    @ApiOperation(value = "Public access", notes = "Endpoint accessible to all users")
 
     public String allAccess() {
         return "Public Content.";
