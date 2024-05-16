@@ -23,7 +23,6 @@ import java.util.Optional;
     @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
     @RestController
     @RequestMapping("/api")
-    @Api(tags = "Event Management API")
 
     public class EventController {
 
@@ -36,11 +35,7 @@ import java.util.Optional;
         private InscrEventRepository inscrEventRepository;
         // Endpoint to create a new event
         @PostMapping("/events")
-        @ApiOperation(value = "Create a new event", notes = "Create a new event entry")
-        @ApiResponses(value = {
-                @ApiResponse(code = 201, message = "Event created successfully"),
-                @ApiResponse(code = 400, message = "Bad request")
-        })
+
         @PreAuthorize("hasRole('ROLE_RESP_EVENEMENT')")
         public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event, @RequestParam Long userId) {
             Optional<User> optionalUser = userRepository.findById(userId);
@@ -54,8 +49,7 @@ import java.util.Optional;
 
         // Endpoint to retrieve all events
         @GetMapping("/events")
-        @ApiOperation(value = "Get all events", notes = "Retrieve a list of all events")
-        @ApiResponse(code = 200, message = "List of events retrieved successfully")
+
         @PreAuthorize("hasRole('ROLE_RESP_EVENEMENT')")
 
         public List<Event> getAllEvents() {
@@ -66,11 +60,7 @@ import java.util.Optional;
 
         // Endpoint to update an existing event
         @PutMapping("/events/{id}")
-        @ApiOperation(value = "Update an existing event", notes = "Update an existing event entry")
-        @ApiResponses(value = {
-                @ApiResponse(code = 200, message = "Event updated successfully"),
-                @ApiResponse(code = 404, message = "Event not found")
-        })
+
         @PreAuthorize("hasRole('ROLE_RESP_EVENEMENT')")
 
         public ResponseEntity<Event> updateEvent(@PathVariable Long id, @Valid @RequestBody Event event) {
@@ -88,11 +78,7 @@ import java.util.Optional;
 
         // Endpoint to delete an event by ID
         @DeleteMapping("/events/{id}")
-        @ApiOperation(value = "Delete event", notes = "Delete an event by its ID")
-        @ApiResponses(value = {
-                @ApiResponse(code = 200, message = "Event deleted successfully"),
-                @ApiResponse(code = 404, message = "Event not found")
-        })
+
         @PreAuthorize("hasRole('ROLE_RESP_EVENEMENT')")
         public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
             Optional<Event> optionalEvent = EventRepository.findById(id);
@@ -105,11 +91,7 @@ import java.util.Optional;
 
         // Endpoint pour récupérer un événement par son ID
         @GetMapping("/events/{id}")
-        @ApiOperation(value = "Get event by ID", notes = "Retrieve a single event by its ID")
-        @ApiResponses(value = {
-                @ApiResponse(code = 200, message = "Event retrieved successfully"),
-                @ApiResponse(code = 404, message = "Event not found")
-        })
+
         public ResponseEntity<Event> getEventById(@PathVariable Long id) {
             Optional<Event> optionalEvent = EventRepository.findById(id);
             return optionalEvent.map(ResponseEntity::ok)
@@ -118,11 +100,7 @@ import java.util.Optional;
 
         // Endpoint pour permettre aux visiteurs de s'inscrire à un événement
         @PostMapping("/events/{id}/register")
-        @ApiOperation(value = "Register for an event", notes = "Register for a specific event")
-        @ApiResponses(value = {
-                @ApiResponse(code = 201, message = "Registration successful"),
-                @ApiResponse(code = 400, message = "Bad request")
-        })
+
         public ResponseEntity<?> registerForEvent(@PathVariable Long id, @Valid @RequestBody InscrEvent inscrEvent) {
             try {
                 Optional<Event> optionalEvent = EventRepository.findById(id);

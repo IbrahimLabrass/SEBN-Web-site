@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-@Api(tags = "Feedback Management API")
 public class FeedbackController {
 
     @Autowired
@@ -26,8 +25,6 @@ public class FeedbackController {
 
     // Endpoint pour récupérer tous les feedbacks
     @GetMapping("/feedbacks")
-    @ApiOperation(value = "Get all feedbacks", notes = "Retrieve a list of all feedbacks")
-    @ApiResponse(code = 200, message = "List of feedbacks retrieved successfully")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
 
     public List<FeedbackEvent> getAllFeedbacks() {
@@ -36,8 +33,7 @@ public class FeedbackController {
 
     // Endpoint pour créer un nouveau feedback
     @PostMapping("/feedbacks")
-    @ApiOperation(value = "Create a new feedback", notes = "Create a new feedback entry")
-    @ApiResponse(code = 201, message = "Feedback created successfully")
+
     public ResponseEntity<FeedbackEvent> createFeedback(@Valid @RequestBody FeedbackEvent feedback) {
         try {
             FeedbackEvent createdFeedback = feedbackRepository.save(feedback);
@@ -49,11 +45,7 @@ public class FeedbackController {
 
     // Endpoint pour récupérer un feedback par ID
     @GetMapping("/feedbacks/{id}")
-    @ApiOperation(value = "Get feedback by ID", notes = "Retrieve a single feedback by its ID")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Feedback retrieved successfully"),
-            @ApiResponse(code = 404, message = "Feedback not found")
-    })
+
     public ResponseEntity<FeedbackEvent> getFeedbackById(@PathVariable Long id) {
         Optional<FeedbackEvent> optionalFeedback = feedbackRepository.findById(id);
         return optionalFeedback.map(ResponseEntity::ok)

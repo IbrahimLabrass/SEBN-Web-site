@@ -23,7 +23,6 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/api")
-@Api(tags = "Internship Management API")
 
 public class StageController {
 
@@ -36,11 +35,7 @@ public class StageController {
 
 
     @PostMapping("/stage-request")
-    @ApiOperation(value = "request internship", notes = "request an  internship ")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Internship updated successfully"),
-            @ApiResponse(code = 404, message = "not done")
-    })
+
     public ResponseEntity<?> createStageRequest(@Valid @RequestBody DemandeStage demandeStage) {
         try {
             // Enregistrez la demande de stage dans la base de données
@@ -51,18 +46,13 @@ public class StageController {
         }
     }
     @GetMapping("/stages")
-    @ApiOperation(value = "Get all internships", notes = "Retrieve a list of all internships")
-    @ApiResponse(code = 200, message = "List of internships retrieved successfully")
+
     public List<Stage> getAllStages() {
         return stageRepository.findAll();
     }
 
     @GetMapping("/stages/{id}")
-    @ApiOperation(value = "Get internship by ID", notes = "Retrieve a single internship by its ID")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Internship retrieved successfully"),
-            @ApiResponse(code = 404, message = "Internship not found")
-    })
+
     public ResponseEntity<Stage> getStageById(@PathVariable(value = "id") Long id) {
         Optional<Stage> optionalStage = stageRepository.findById(id);
         return optionalStage.map(ResponseEntity::ok)
@@ -72,8 +62,6 @@ public class StageController {
     @PostMapping("/stages")
     @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
 
-    @ApiOperation(value = "Create a new internship", notes = "Create a new internship entry")
-    @ApiResponse(code = 201, message = "Internship created successfully")
     public ResponseEntity<Stage> createStage(@Valid @RequestBody Stage stage) {
         Stage createdStage = stageRepository.save(stage);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdStage);
@@ -82,11 +70,7 @@ public class StageController {
     @PutMapping("/stages/{id}")
     @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
 
-    @ApiOperation(value = "Update internship", notes = "Update an existing internship by its ID")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Internship updated successfully"),
-            @ApiResponse(code = 404, message = "Internship not found")
-    })
+
     public ResponseEntity<Stage> updateStage(@PathVariable(value = "id") Long id,
                                              @Valid @RequestBody Stage stageDetails) {
         Optional<Stage> optionalStage = stageRepository.findById(id);
@@ -107,11 +91,7 @@ public class StageController {
     @DeleteMapping("/stages/{id}")
     @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
 
-    @ApiOperation(value = "Delete internship", notes = "Delete an internship by its ID")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Internship deleted successfully"),
-            @ApiResponse(code = 404, message = "Internship not found")
-    })
+
     public ResponseEntity<?> deleteStage(@PathVariable(value = "id") Long id) {
         Optional<Stage> optionalStage = stageRepository.findById(id);
         if (!optionalStage.isPresent()) {
@@ -125,11 +105,7 @@ public class StageController {
     // Endpoint for preselecting interns, accessible only to ROLE_RESP_RECRUTEMENT
     @PostMapping("/stages/preselection")
     @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
-    @ApiOperation(value = "Preselect interns", notes = "Preselect interns for internship")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Interns preselected successfully"),
-            @ApiResponse(code = 500, message = "Error occurred while preselecting interns")
-    })
+
     public ResponseEntity<?> preselectInterns(@RequestBody List<Long> internIds) {
         try {
             for (Long internId : internIds) {
@@ -151,11 +127,7 @@ public class StageController {
 
     @PutMapping("/stages/{id}/affecter-encadrant")
     @PreAuthorize("hasRole('ROLE_RESP_STAGE')")
-    @ApiOperation(value = "Assign supervisor to internship", notes = "Assign a supervisor to an internship")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Supervisor assigned successfully"),
-            @ApiResponse(code = 404, message = "Internship not found")
-    })
+
     public ResponseEntity<?> affecterEncadrant(@PathVariable Long id, Map<String, String> requestBody) {
         Optional<Stage> optionalStage = stageRepository.findById(id);
         if (!optionalStage.isPresent()) {

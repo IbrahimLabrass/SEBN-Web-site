@@ -100,16 +100,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
-		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -141,21 +132,14 @@
 							<locations>
 								<location>com.SEBN.backend.controllers</location>
 							</locations>
-							<basePath>http://localhost:8081</basePath>
+							<basePath>http://localhost:8080</basePath>
 							<info>
-								<title>Swagger Api Documentation for Todo application</title>
-								<version>${project.version}</version>
-								<description>Swagger Api documentation for Todo application</description>
 								<contact>
 									<email>labrasibrahim@gmail.com</email>
 									<name>Ibrahim Labras</name>
 									<url>https://github.com/IbrahimLabrass/SEBN-Web-site</url>
 								</contact>
 							</info>
-							<outputPath>${project.build.directory}</outputPath>
-							<outputFormats>json</outputFormats>
-							<swaggerApiReader>com.github.kongchen.swagger.docgen.reader.SpringMvcApiReader</swaggerApiReader>
-							<swaggerDirectory>${project.build.directory}</swaggerDirectory>
 						</apiSource>
 					</apiSources>
 				</configuration>

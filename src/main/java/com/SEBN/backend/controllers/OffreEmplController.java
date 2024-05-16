@@ -24,7 +24,6 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/api")
-@Api(tags = "Job Offer Management API")
 
 public class OffreEmplController {
     @Autowired
@@ -38,8 +37,7 @@ public class OffreEmplController {
     }
 
     @GetMapping("/offres")
-    @ApiOperation(value = "Get all job offers", notes = "Retrieve a list of all job offers")
-    @ApiResponse(code = 200, message = "List of job offers retrieved successfully")
+
     @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
 
     public List<OffreEmpl> getAllOffres() {
@@ -50,11 +48,7 @@ public class OffreEmplController {
 
     @GetMapping("/offres/{id}")
     @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
-    @ApiOperation(value = "Get job offer by ID", notes = "Retrieve a single job offer by its ID")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Job offer retrieved successfully"),
-            @ApiResponse(code = 404, message = "Job offer not found")
-    })
+
 
     public ResponseEntity<OffreEmpl> getOffreById(@PathVariable(value = "id") Long id) {
         OffreEmpl offres = OffreEmplRepository.findById(id).orElse(null);
@@ -66,8 +60,7 @@ public class OffreEmplController {
 
     @GetMapping("/offre/{id}")
     @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
-    @ApiOperation(value = "Get job offers by user", notes = "Retrieve job offers by user ID")
-    @ApiResponse(code = 200, message = "List of job offers retrieved successfully")
+
 
     public List<OffreEmpl> getOffreByUser(@PathVariable(value = "id") String titre)
     {
@@ -77,19 +70,14 @@ public class OffreEmplController {
 
     @PostMapping("/offre")
     @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
-    @ApiOperation(value = "Create a new job offer", notes = "Create a new job offer entry")
-    @ApiResponse(code = 200, message = "Job offer created successfully")
+
     public OffreEmpl createOffre(@Valid @RequestBody OffreEmpl offres) {
         return OffreEmplRepository.save(offres);
     }
 
     @PutMapping("/offres/{id}")
     @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
-    @ApiOperation(value = "Update an existing job offer", notes = "Update an existing job offer entry")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Job offer updated successfully"),
-            @ApiResponse(code = 404, message = "Job offer not found")
-    })
+
     public ResponseEntity<OffreEmpl> updateOffre(@PathVariable(value = "id") Long id,
                                                  @Valid @RequestBody OffreEmpl offresDetails) {
         Optional<OffreEmpl> optionalOffre = OffreEmplRepository.findById(id);
@@ -109,11 +97,7 @@ public class OffreEmplController {
 
     @DeleteMapping("/offres/{id}")
     @PreAuthorize("hasRole('ROLE_RESP_RECRU')")
-    @ApiOperation(value = "Delete job offer", notes = "Delete a job offer by its ID")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Job offer deleted successfully"),
-            @ApiResponse(code = 404, message = "Job offer not found")
-    })
+
     public ResponseEntity<Map<String, Boolean>> deleteOffre(@PathVariable(value = "id") Long id) {
         Optional<OffreEmpl> optionalOffre = OffreEmplRepository.findById(id);
         if (!optionalOffre.isPresent()) {
@@ -131,11 +115,7 @@ public class OffreEmplController {
     }
     // Endpoint pour permettre aux visiteurs de postuler à une offre
     @PostMapping("/offres/{id}/postuler")
-    @ApiOperation(value = "Apply for a job offer", notes = "Apply for a specific job offer")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Application successful"),
-            @ApiResponse(code = 400, message = "Bad request")
-    })
+
     public ResponseEntity<?> postulerPourOffre(@PathVariable Long id, @Valid @RequestBody Condidature candidature) {
         try {
             Optional<OffreEmpl> optionalOffre = OffreEmplRepository.findById(id);
